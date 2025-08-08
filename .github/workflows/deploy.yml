@@ -25,6 +25,13 @@ jobs:
     - name: Install Dependencies
       if: steps.cache.outputs.cache-hit != 'true'
       run: npm ci
+    
+    # 生成静态文件
+    - name: Generate Static Files
+      run: |
+        npx hexo clean
+        npx hexo generate
+        touch public/.nojekyll  # 确保创建 .nojekyll 文件
         
     # Deploy hexo blog website.
     - name: Deploy
@@ -32,6 +39,7 @@ jobs:
       uses: peaceiris/actions-gh-pages@v4.0.0
       with:
         deploy_key: ${{ secrets.HEXO_DEPLOY_KEY }}
+        publish_dir: ./public # 指定发布目录
         user_name: rhainlee
         user_email: imrhainlee@gmail.com
         commit_msg: ${{ github.event.head_commit.message }}
