@@ -5,8 +5,9 @@ node_js:
 cache: npm 
 branches: 
   only: 
-  - gh-pages # build master branch only 
+  - main # build main branch only 
 script: 
+  - hexo clean
   - hexo generate 
 deploy: 
   provider: pages 
@@ -14,5 +15,6 @@ deploy:
   github-token: $GH_TOKEN 
   keep-history: true 
   on: 
-    branch: gh-pages
+    branch: main # 源代码分支
   local-dir: public
+  target-branch: gh-pages # 指定目标分支
