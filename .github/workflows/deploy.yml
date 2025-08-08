@@ -13,34 +13,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        submodules: true
-        
-    - name: Verify Theme Submodule
-      run: |
-        echo "Current directory: $(pwd)"
-        echo "List themes directory:"
-        ls -la themes/
-        echo "Check if next theme exists:"
-        if [ -d "themes/next" ]; then
-          echo "✅ Next theme directory exists"
-          ls -la themes/next/
-        else
-          echo "❌ Next theme directory does not exist"
-          echo "Check .gitmodules file:"
-          cat .gitmodules
-          echo "Try manual submodule update:"
-          git submodule update --init --recursive
-          if [ -d "themes/next" ]; then
-            echo "✅ Next theme directory exists after manual update"
-            ls -la themes/next/
-          else
-            echo "❌ Still no Next theme directory"
-            echo "Cloning theme manually:"
-            git clone https://github.com/theme-next/hexo-theme-next.git themes/next
-          fi
-        fi
-
-
+        submodules: true        
     - name: Cache node modules
       uses: actions/cache@v4
       id: cache
