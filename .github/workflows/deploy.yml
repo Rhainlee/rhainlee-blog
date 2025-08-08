@@ -26,24 +26,39 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: npm ci
     
-    - name: Build and Deploy
-      uses: theme-keep/hexo-deploy-github-pages-action@master # 使用专门部署 Hexo 到 GitHub pages 的 action
-      env:
-        PERSONAL_TOKEN: ${{ secrets.HEXO_DEPLOY_KEY }} # secret 名
-        PUBLISH_REPOSITORY: Rhainlee/rhainlee-blog # 公共仓库，格式：GitHub 用户名/仓库名
-        BRANCH: gh-pages # 分支，填 gh-pages 就行
-        PUBLISH_DIR: ./public # 部署 public 目录下的文件
+    # - name: Build and Deploy
+    #   uses: theme-keep/hexo-deploy-github-pages-action@master # 使用专门部署 Hexo 到 GitHub pages 的 action
+    #   env:
+    #     PERSONAL_TOKEN: ${{ secrets.HEXO_DEPLOY_KEY }} # secret 名
+    #     PUBLISH_REPOSITORY: Rhainlee/rhainlee-blog # 公共仓库，格式：GitHub 用户名/仓库名
+    #     BRANCH: gh-pages # 分支，填 gh-pages 就行
+    #     PUBLISH_DIR: ./public # 部署 public 目录下的文件
         
     # Deploy hexo blog website.
-    # - name: Deploy
-    #   id: deploy
-    #   uses: peaceiris/actions-gh-pages@v4.0.0
-    #   with:
-    #     deploy_key: ${{ secrets.HEXO_DEPLOY_KEY }}
-    #     publish_dir: ./public # 指定发布目录
-    #     user_name: rhainlee
-    #     user_email: imrhainlee@gmail.com
-    #     commit_msg: ${{ github.event.head_commit.message }}
+    # 添加生成静态文件的步骤
+    - name: Generate Static Files
+      run: |
+        npx hexo clean
+        npx hexo generate
+        touch public/.nojekyll  # 创建.nojekyll文件
+    
+    # 列出生成的文件以确认
+    - name: List Generated Files
+      run: |
+        ls -la public/
+        echo "Checking index.html:"
+        cat public/index.html | head -5 || echo "index.html not found!"
+
+
+    - name: Deploy
+      id: deploy
+      uses: peaceiris/actions-gh-pages@v4.0.0
+      with:
+        deploy_key: ${{ secrets.HEXO_DEPLOY_KEY }}
+        publish_dir: ./public # 指定发布目录
+        user_name: rhainlee
+        user_email: imrhainlee@gmail.com
+        commit_msg: ${{ github.event.head_commit.message }}
     - name: Get the output
       run: |
         echo "${{ steps.deploy.outputs.notify }}"
