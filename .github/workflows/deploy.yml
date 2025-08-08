@@ -29,12 +29,12 @@ jobs:
     # Deploy hexo blog website.
     - name: Deploy
       id: deploy
-      uses: sma11black/hexo-action@v1.0.3
+      uses: peaceiris/actions-gh-pages@v4.0.0
       with:
         deploy_key: ${{ secrets.HEXO_DEPLOY_KEY }}
         user_name: rhainlee
         user_email: imrhainlee@gmail.com
-        commit_msg: ${{ github.event.head_commit.message }})
+        commit_msg: ${{ github.event.head_commit.message }}
     - name: Get the output
       run: |
         echo "${{ steps.deploy.outputs.notify }}"
