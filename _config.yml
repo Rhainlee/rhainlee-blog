@@ -13,7 +13,15 @@ timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://rhainlee.github.io
+# /url: https://rhainlee.github.io
+
+# 将 url 改为你的完整博客地址
+url: https://rhainlee.github.io/rhainlee-blog
+
+# 关键：将 root 改为你的仓库名（前后都要有斜杠）
+root: /rhainlee-blog/
+
+
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
